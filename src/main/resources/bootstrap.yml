@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: config-server
+  profiles:    active: vault
+  cloud:    config:      server:
+        native:
+          search-locations: classpath:config/
+#        vault:
+#          authentication: token
+#          token: 's.apHyKFC2a9gojXw9FUGlMUos'
+#          kv-version: 2
+#          backend: o-stock
+#          profile-separator: '/'
+
+server:  port: 8071
+  
+encrypt:  key: symmetric-key
