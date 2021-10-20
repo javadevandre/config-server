@@ -1,0 +1,8 @@
+example:
+  property: I AM PROD
+
+spring:
+  datasource:
+    url: jdbc:postgresql://host.docker.internal:5433/ostock_prod
+    username: postgres
+    password: "{cipher}66212ab3c781bb6353758aeda8acafbfd1dd831c813db384b28476fe12153b8f7cd67def7dcf049f604bbf27916f1dc2"

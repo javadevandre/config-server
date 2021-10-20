@@ -3,6 +3,6 @@ example:
 
 spring:
   datasource:
-    url: jdbc:postgresql://host.docker.internal:5433/ostock_dev
+    url: jdbc:postgresql://host.docker.internal:5432/ostock_dev
     username: postgres
     password: "{cipher}51233b7ba8e865ac8b3fea47a90cc24946ce3ffe5a7c11ac9453db1cba0f783a"

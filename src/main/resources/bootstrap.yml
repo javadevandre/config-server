@@ -1,17 +1,24 @@
+server:
+  port: 8071
+
 spring:
   application:
     name: config-server
-  profiles:    active: vault
+  profiles:    active: native
   cloud:    config:      server:
         native:
           search-locations: classpath:config/
 #        vault:
 #          authentication: token
-#          token: 's.apHyKFC2a9gojXw9FUGlMUos'
+#          token: "s.apHyKFC2a9gojXw9FUGlMUos"
 #          kv-version: 2
 #          backend: o-stock
-#          profile-separator: '/'
+#          profile-separator: "/"
 
-server:  port: 8071
-  
 encrypt:  key: symmetric-key
+  
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
