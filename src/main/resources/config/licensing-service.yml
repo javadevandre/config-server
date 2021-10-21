@@ -30,3 +30,4 @@ eureka:
       defaultZone: http://host.docker.internal:8070/eureka/
     register-with-eureka: true
     fetch-registry: true
+    registry-fetch-interval-seconds: 5

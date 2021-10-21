@@ -41,66 +41,82 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-#  config-server:
-#    image: ostock/config-server:0.0.1-SNAPSHOT
-#    environment:
-#      ENCRYPT_KEY: symmetric-key
-#      SPRING_PROFILES_ACTIVE: native
-#    ports:
-#       - "8071:8071"
-#    networks:
-#      backend:
-#        aliases:
-#          - "config-server"
-#  eureka-server:
-#    image: ostock/eureka-server:0.0.1-SNAPSHOT
-#    environment:
-#      SPRING_CLOUD_CONFIG_URI: http://host.docker.internal:8071
-#    ports:
-#       - "8070:8070"
-#    depends_on:
-#      organization-db:
-#        condition: service_healthy
-#      licensing-db:
-#        condition: service_healthy
-#      config-server:
-#        condition: service_started
-#    networks:
-#      backend:
-#        aliases:
-#          - "eureka-server"
-#  organization-service:
-#    image: ostock/organization-service:0.0.1-SNAPSHOT
-#    environment:
-#      SPRING_PROFILES_ACTIVE: dev
-#      SPRING_CLOUD_CONFIG_URI: http://host.docker.internal:8071
-#    depends_on:
-#      organization-db:
-#        condition: service_healthy
-#      config-server:
-#        condition: service_started
-#    ports:
-#      - "8080:8080"
-#    networks:
-#      backend:
-#        aliases:
-#          - "organization-service"
-#  licensing-service:
-#    image: ostock/licensing-service:0.0.1-SNAPSHOT
-#    environment:
-#      SPRING_PROFILES_ACTIVE: dev
-#      SPRING_CLOUD_CONFIG_URI: http://host.docker.internal:8071
-#    depends_on:
-#      licensing-db:
-#        condition: service_healthy
-#      config-server:
-#        condition: service_started
-#    ports:
-#      - "8081:8081"
-#    networks:
-#      backend:
-#        aliases:
-#          - "licensing-service"
+  config-server:
+    image: ostock/config-server:0.0.1-SNAPSHOT
+    environment:
+      ENCRYPT_KEY: symmetric-key
+      SPRING_PROFILES_ACTIVE: native
+    ports:
+       - "8071:8071"
+    networks:
+      backend:
+        aliases:
+          - "config-server"
+  eureka-server:
+    image: ostock/eureka-server:0.0.1-SNAPSHOT
+    environment:
+      SPRING_CLOUD_CONFIG_URI: http://host.docker.internal:8071
+    ports:
+       - "8070:8070"
+    depends_on:
+      organization-db:
+        condition: service_healthy
+      licensing-db:
+        condition: service_healthy
+      config-server:
+        condition: service_started
+    networks:
+      backend:
+        aliases:
+          - "eureka-server"
+  organization-service:
+    image: ostock/organization-service:0.0.1-SNAPSHOT
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_CLOUD_CONFIG_URI: http://host.docker.internal:8071
+    depends_on:
+      organization-db:
+        condition: service_healthy
+      config-server:
+        condition: service_started
+    ports:
+      - "8080:8080"
+    networks:
+      backend:
+        aliases:
+          - "organization-service"
+  organization-service-2:
+    image: ostock/organization-service:0.0.1-SNAPSHOT
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_CLOUD_CONFIG_URI: http://host.docker.internal:8071
+    depends_on:
+      organization-db:
+        condition: service_healthy
+      config-server:
+        condition: service_started
+    ports:
+      - "8083:8080"
+    networks:
+      backend:
+        aliases:
+          - "organization-service-2"
+  licensing-service:
+    image: ostock/licensing-service:0.0.1-SNAPSHOT
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_CLOUD_CONFIG_URI: http://host.docker.internal:8071
+    depends_on:
+      licensing-db:
+        condition: service_healthy
+      config-server:
+        condition: service_started
+    ports:
+      - "8081:8081"
+    networks:
+      backend:
+        aliases:
+          - "licensing-service"
 networks:
   backend:
     driver: bridge
