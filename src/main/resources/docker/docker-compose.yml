@@ -59,16 +59,25 @@ services:
     ports:
        - "8070:8070"
     depends_on:
-      organization-db:
-        condition: service_healthy
-      licensing-db:
-        condition: service_healthy
       config-server:
         condition: service_started
     networks:
       backend:
         aliases:
           - "eureka-server"
+  api-gateway-server:
+    image: ostock/api-gateway-server:0.0.1-SNAPSHOT
+    environment:
+      SPRING_CLOUD_CONFIG_URI: http://host.docker.internal:8071
+    depends_on:
+      config-server:
+        condition: service_started
+    ports:
+      - "8072:8072"
+    networks:
+      backend:
+        aliases:
+          - "api-gateway-server"
   organization-service:
     image: ostock/organization-service:0.0.1-SNAPSHOT
     environment:
@@ -117,6 +126,7 @@ services:
       backend:
         aliases:
           - "licensing-service"
+  
 networks:
   backend:
     driver: bridge
