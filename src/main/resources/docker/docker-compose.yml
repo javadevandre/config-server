@@ -1,53 +1,98 @@
 version: '3.8'
 
 services:
-  organization-db:
+#  organization-db:
+#    image: postgres:latest
+#    ports:
+#      - "5432:5432"
+#    environment:
+#      POSTGRES_USER: "postgres"
+#      POSTGRES_PASSWORD: "postgres4dev"
+#      POSTGRES_DB: "ostock_dev"
+#    volumes:
+#        - ./organization-db/init.sql:/docker-entrypoint-initdb.d/1-init.sql
+#        - ./organization-db/data.sql:/docker-entrypoint-initdb.d/2-data.sql
+#    networks:
+#      backend:
+#        aliases:
+#          - "organization-db"
+#    healthcheck:
+#      test: ["CMD-SHELL", "pg_isready -U postgres"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#  licensing-db:
+#    image: postgres:latest
+#    ports:
+#      - "5433:5432"
+#    environment:
+#      POSTGRES_USER: "postgres"
+#      POSTGRES_PASSWORD: "postgres4dev"
+#      POSTGRES_DB: "ostock_dev"
+#    volumes:
+#        - ./licensing-db/init.sql:/docker-entrypoint-initdb.d/1-init.sql
+#        - ./licensing-db/data.sql:/docker-entrypoint-initdb.d/2-data.sql
+#    networks:
+#      backend:
+#        aliases:
+#          - "licensing-db"
+#    healthcheck:
+#      test: ["CMD-SHELL", "pg_isready -U postgres"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+  keycloak-db:
     image: postgres:latest
     ports:
-      - "5432:5432"
+      - "5434:5432"
     environment:
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "postgres4dev"
-      POSTGRES_DB: "ostock_dev"
-    volumes:
-        - ./organization-db/init.sql:/docker-entrypoint-initdb.d/1-init.sql
-        - ./organization-db/data.sql:/docker-entrypoint-initdb.d/2-data.sql
+      POSTGRES_USER: "keycloak"
+      POSTGRES_PASSWORD: "keycloak"
+      POSTGRES_DB: "keycloak_db"
     networks:
       backend:
         aliases:
-          - "organization-db"
+          - "keycloak-db"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -d keycloak_db -U keycloak"]
       interval: 10s
       timeout: 5s
       retries: 5
-  licensing-db:
-    image: postgres:latest
-    ports:
-      - "5433:5432"
+  keycloak-server:
+    image: jboss/keycloak
+    restart: always
     environment:
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "postgres4dev"
-      POSTGRES_DB: "ostock_dev"
+      DB_VENDOR: POSTGRES
+      DB_ADDR: keycloak-db
+      DB_DATABASE: keycloak_db
+      DB_USER: keycloak
+      DB_SCHEMA: public
+      DB_PASSWORD: keycloak
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
     volumes:
-        - ./licensing-db/init.sql:/docker-entrypoint-initdb.d/1-init.sql
-        - ./licensing-db/data.sql:/docker-entrypoint-initdb.d/2-data.sql
+        - ./keycloak-server/realm-export.json:/opt/jboss/keycloak/realm-export.json
+    command:
+      - "-b 0.0.0.0"
+      - "-Dkeycloak.import=/opt/jboss/keycloak/realm-export.json"
+      - "-Dkeycloak.profile.feature.scripts=enabled"
+      - "-Dkeycloak.profile.feature.upload_scripts=enabled"
+    ports:
+      - "8069:8080"
+    depends_on:
+      keycloak-db:
+        condition: service_healthy
     networks:
       backend:
         aliases:
-          - "licensing-db"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+          - "keycloak-server"
   config-server:
     image: ostock/config-server:0.0.1-SNAPSHOT
     environment:
       ENCRYPT_KEY: symmetric-key
       SPRING_PROFILES_ACTIVE: native
     ports:
-       - "8071:8071"
+      - "8071:8071"
     networks:
       backend:
         aliases:
@@ -57,7 +102,7 @@ services:
     environment:
       SPRING_CLOUD_CONFIG_URI: http://host.docker.internal:8071
     ports:
-       - "8070:8070"
+      - "8070:8070"
     depends_on:
       config-server:
         condition: service_started
