@@ -31,3 +31,42 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     registry-fetch-interval-seconds: 5
+    
+resilience4j:
+  circuitbreaker:
+    instances:
+      license-db:
+        register-health-indicator: true
+        ring-buffer-size-in-closed-state: 4
+        ring-buffer-size-in-half-open-state: 2
+        wait-duration-in-open-state: 30s
+        failure-rate-threshold: 50
+      organization-service:
+        register-health-indicator: true
+        ring-buffer-size-in-closed-state: 4
+        ring-buffer-size-in-half-open-state: 2
+        wait-duration-in-open-state: 30s
+        failure-rate-threshold: 50
+  bulkhead:
+    instances:
+      license-db:
+        max-concurrent-calls: 2
+        max-wait-duration: 10ms
+  thread-pool-bulkhead:
+    instances:
+      license-db:
+        max-thread-pool-size: 1
+        core-thread-pool-size: 1
+        queue-capacity: 1
+        keep-alive-duration: 20ms
+  retry:
+    instances:
+      license-db:
+        max-attempts: 2
+        wait-duration: 10000
+  ratelimiter:
+    instances:
+      license-db:
+        limit-for-period: 2
+        limit-refresh-period: 5000
+        timeout-duration: 1000ms
