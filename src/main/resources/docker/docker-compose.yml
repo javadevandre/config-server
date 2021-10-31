@@ -1,46 +1,46 @@
 version: '3.8'
 
 services:
-#  organization-db:
-#    image: postgres:latest
-#    ports:
-#      - "5432:5432"
-#    environment:
-#      POSTGRES_USER: "postgres"
-#      POSTGRES_PASSWORD: "postgres4dev"
-#      POSTGRES_DB: "ostock_dev"
-#    volumes:
-#        - ./organization-db/init.sql:/docker-entrypoint-initdb.d/1-init.sql
-#        - ./organization-db/data.sql:/docker-entrypoint-initdb.d/2-data.sql
-#    networks:
-#      backend:
-#        aliases:
-#          - "organization-db"
-#    healthcheck:
-#      test: ["CMD-SHELL", "pg_isready -U postgres"]
-#      interval: 10s
-#      timeout: 5s
-#      retries: 5
-#  licensing-db:
-#    image: postgres:latest
-#    ports:
-#      - "5433:5432"
-#    environment:
-#      POSTGRES_USER: "postgres"
-#      POSTGRES_PASSWORD: "postgres4dev"
-#      POSTGRES_DB: "ostock_dev"
-#    volumes:
-#        - ./licensing-db/init.sql:/docker-entrypoint-initdb.d/1-init.sql
-#        - ./licensing-db/data.sql:/docker-entrypoint-initdb.d/2-data.sql
-#    networks:
-#      backend:
-#        aliases:
-#          - "licensing-db"
-#    healthcheck:
-#      test: ["CMD-SHELL", "pg_isready -U postgres"]
-#      interval: 10s
-#      timeout: 5s
-#      retries: 5
+  organization-db:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres4dev"
+      POSTGRES_DB: "ostock_dev"
+    volumes:
+        - ./organization-db/init.sql:/docker-entrypoint-initdb.d/1-init.sql
+        - ./organization-db/data.sql:/docker-entrypoint-initdb.d/2-data.sql
+    networks:
+      backend:
+        aliases:
+          - "organization-db"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  licensing-db:
+    image: postgres:latest
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres4dev"
+      POSTGRES_DB: "ostock_dev"
+    volumes:
+        - ./licensing-db/init.sql:/docker-entrypoint-initdb.d/1-init.sql
+        - ./licensing-db/data.sql:/docker-entrypoint-initdb.d/2-data.sql
+    networks:
+      backend:
+        aliases:
+          - "licensing-db"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   keycloak-db:
     image: postgres:latest
     ports:

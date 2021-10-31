@@ -5,6 +5,23 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
+#### Check why these configurations are not working as expected
+#      default-filters:
+#      - RemoveRequestHeader=Cookie,Set-Cookie
+#      - MapRequestHeader=Authorization,Authorization
+#      routes:
+#      - id: licensing-service
+#        uri: lb://licensing-service
+#        predicates:
+#        - Path=/licensing-service/**
+#        filters:
+#        - RemoveRequestHeader=Cookie,Set-Cookie
+#      - id: organization-service
+#        uri: lb://organization-service
+#        predicates:
+#        - Path=/organization-service/**
+#        filters:
+#        - RemoveRequestHeader=Cookie,Set-Cookie
 
 management:
   endpoints:

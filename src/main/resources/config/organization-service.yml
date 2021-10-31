@@ -30,3 +30,13 @@ eureka:
       defaultZone: http://host.docker.internal:8070/eureka/
     register-with-eureka: true
     fetch-registry: true
+    
+keycloak:
+  realm: spmia-realm
+  auth-server-url: http://host.docker.internal:8069/auth
+  ssl-required: external
+  resource: o-stock
+  use-resource-role-mappings: true
+  bearer-only: true
+  credentials:
+    secret: need-to-check-why-its-not-used

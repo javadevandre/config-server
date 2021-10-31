@@ -70,3 +70,13 @@ resilience4j:
         limit-for-period: 2
         limit-refresh-period: 5000
         timeout-duration: 1000ms
+        
+keycloak:
+  realm: spmia-realm
+  auth-server-url: http://host.docker.internal:8069/auth
+  ssl-required: external
+  resource: o-stock
+  use-resource-role-mappings: true
+  bearer-only: true
+  credentials:
+    secret: 940d0a7c-8d42-43e3-b1f1-643eb8e23062
